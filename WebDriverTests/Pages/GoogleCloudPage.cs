@@ -1,0 +1,135 @@
+﻿using OpenQA.Selenium;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WebDriverTests.Pages
+{
+    class GoogleCloudPage : Bases.BasePage
+    {
+        private const string HomePage = "https://cloud.google.com/";
+        public GoogleCloudPage(IWebDriver driver) : base(driver)
+        {
+        }
+
+        #region Public methods
+
+        public GoogleCloudPage OpenPage()
+        {
+            _driver.Navigate().GoToUrl(HomePage);
+            return this;
+        }
+
+        public GoogleCloudPage WriteToSearchBox(string text)
+        {
+            WaitAndClick(By.Name("q"));
+            WaitUntilClickable(By.Name("q")).SendKeys(text);
+            return this;
+        }
+
+        public GoogleCloudPage SelectSearchBoxOption(string text)
+        {
+            WaitAndClick(By.PartialLinkText(text));
+            return this;
+        }
+
+        public GoogleCloudPage SwitchToCalculatorIFrame()
+        {
+            _driver.SwitchTo().Frame(WaitUntilClickable(By.XPath("//*[@id='cloud-site']/devsite-iframe/iframe")));
+            _driver.SwitchTo().Frame(WaitUntilClickable(By.Id("myFrame")));
+            return this;
+        }
+
+        public GoogleCloudPage AddNumberOfInstances(int number)
+        {
+            WaitUntilClickable(By.Id("input_74")).SendKeys(number.ToString());
+            return this;
+        }
+        public GoogleCloudPage SelectMachineTypeStandard2()
+        {
+            WaitAndClick(By.Id("select_value_label_70"));
+            WaitAndClick(By.Id("select_option_271"));
+            return this;
+        }
+
+        public GoogleCloudPage AddNodesCount(int count)
+        {
+            WaitUntilClickable(By.Name("nodesCount")).SendKeys(count.ToString());
+            return this;
+        }
+
+        public GoogleCloudPage CheckAddGPUs()
+        {
+            WaitAndClick(By.XPath("//md-checkbox[contains(@aria-label, 'Add GPUs')]"));
+            return this;
+        }
+        public GoogleCloudPage SelectNvidiaTeslaP4()
+        {
+            WaitAndClick(By.Id("select_413"));
+            WaitAndClick(By.Id("select_option_420"));
+            return this;
+        }
+
+        public GoogleCloudPage Select4NumberOfGPUs()
+        {
+            WaitAndClick(By.Id("select_411"));
+            WaitAndClick(By.Id("select_option_427"));
+            return this;
+        }
+
+        public GoogleCloudPage Select24x375GbSSDs()
+        {
+            WaitAndClick(By.Id("select_133"));
+            WaitAndClick(By.Id("select_option_132"));
+            return this;
+        }
+
+        public GoogleCloudPage SelectFrankfurtLocation()
+        {
+            WaitAndClick(By.Id("select_136"));
+            WaitAndClick(By.Id("select_option_292"));
+            return this;
+        }
+
+        public GoogleCloudPage SelectCommitedUsage1Year()
+        {
+            WaitAndClick(By.Id("select_141"));
+            WaitAndClick(By.Id("select_option_139"));
+            return this;
+        }
+
+        public GoogleCloudPage AddToEstimates()
+        {
+            var buttons = _driver.FindElements(By.XPath("//button[contains(@aria-label, 'Add to Estimate')]"));
+            buttons[0].SendKeys(Keys.Enter);
+            buttons[1].SendKeys(Keys.Enter);
+            return this;
+        }
+
+        public string GetEstimatePrice()
+        {
+            var estimatePrice = _driver.FindElement(By.XPath("/html/body/md-content/md-card/div/md-card-content[2]/md-card/md-card-content/div/div/div/h2/b")).Text;
+
+            return estimatePrice.Split(' ')[4];
+        }
+
+        public void OpenNewTab()
+        {
+            _driver.SwitchTo().NewWindow(WindowType.Tab);
+        }
+
+        public GoogleCloudPage EmailEstimate(string email)
+        {
+            WaitAndClick(By.Id("email_quote"));
+            WaitUntilClickable(By.Name("description"));
+            var emailField = _driver.FindElements(By.Name("description"))[2];
+            emailField.SendKeys(email);
+            WaitAndClick(By.XPath("//button[@aria-label = 'Send Email']"));
+            return this;
+        }
+
+        #endregion
+    }
+}
